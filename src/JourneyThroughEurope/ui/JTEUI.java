@@ -131,7 +131,7 @@ public class JTEUI extends Pane {
         splashScreenImageView = new ImageView(splashScreenImage);
         splashScreenImageLabel = new Label();
         splashScreenImageLabel.setGraphic(splashScreenImageView);
-        splashScreenImageLabel.setLayoutX(-45);							// the pane
+        splashScreenImageLabel.setLayoutX(-45);
         splashScreenPane.getChildren().add(splashScreenImageLabel);
         mainPane.setCenter(splashScreenPane);
     }
