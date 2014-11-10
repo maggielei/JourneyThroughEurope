@@ -12,22 +12,16 @@
         <property name="SPLASH_SCREEN_IMAGE_NAME"   value="JTESplashScreen.png"></property>
         <property name="DATA_PATH"                  value="./data/"></property>
         <property name="IMG_PATH"                   value="./img/"></property>
-        <property name="LETTERS_FONT_FAMILY"        value="Georgia"></property>
-        <property name="LETTERS_FONT_SIZE"          value="24"></property>
-        <property name="GUESSES_FONT_FAMILY"        value="Georgia"></property>
-        <property name="GUESSES_FONT_SIZE"          value="22"></property>
-        <property name="GUESS_FONT_SIZE"            value="36"></property>
-        <property name="GUESS_FONT_FAMILY"          value="Georgia"></property>
 
 		<property name="EXIT_REQUEST_TEXT"      	value="Are you sure you wish to quit?"></property>
         <property name="YES_TEXT"               	value="Yes"></property>
         <property name="NO_TEXT"                	value="No"></property>
 		
         <!-- THESE ARE THE GUI IMAGES -->
-        <property name="GAME_IMG_NAME"          	value="EN_Game.png"></property>
-        <property name="LOAD_IMG_NAME"          	value="EN_Load.png"></property>
-        <property name="HELP_IMG_NAME"          	value="EN_Help.png"></property>
-        <property name="EXIT_IMG_NAME"          	value="EN_Exit.png"></property>
+        <property name="GAME_IMG_NAME"          	value="Game.png"></property>
+        <property name="LOAD_IMG_NAME"          	value="Load.png"></property>
+        <property name="HELP_IMG_NAME"          	value="Help.png"></property>
+        <property name="EXIT_IMG_NAME"          	value="Exit.png"></property>
 		
 		 <!-- TOOLTIPS -->
         <property name="GAME_TOOLTIP"          		value="Go to Game Screen"></property>

@@ -15,10 +15,11 @@ import properties_manager.PropertiesManager;
 import xml_utilities.InvalidXMLFileFormatException;
 import JourneyThroughEurope.file.JTEFileLoader;
 import JourneyThroughEurope.game.JTEGameStateManager;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.geometry.Insets;
 
 public class JTEEventHandler {
     private JTEUI ui;
@@ -28,10 +29,6 @@ public class JTEEventHandler {
     public void respondToSwitchScreenRequest(JTEUI.JTEUIState uiState) {
         ui.changeWorkspace(uiState);
     }
-    public void respondToNewGameRequest() {
-        JTEGameStateManager gsm = ui.getGSM();
-        gsm.startNewGame();
-    }
     public void respondToExitRequest(Stage primaryStage) {
         // ENGLISH IS THE DEFAULT
         String options[] = new String[]{"Yes", "No"};
@@ -39,21 +36,35 @@ public class JTEEventHandler {
         options[0] = props.getProperty(JTEPropertyType.DEFAULT_YES_TEXT);
         options[1] = props.getProperty(JTEPropertyType.DEFAULT_NO_TEXT);
         String verifyExit = props.getProperty(JTEPropertyType.DEFAULT_EXIT_TEXT);
+        
+        if (props.getProperty(JTEPropertyType.YES_TEXT) != null) {
+            options[0] = props.getProperty(JTEPropertyType.YES_TEXT);
+            options[1] = props.getProperty(JTEPropertyType.NO_TEXT);
+            verifyExit = props.getProperty(JTEPropertyType.EXIT_REQUEST_TEXT);
+        }
+        
         // FIRST MAKE SURE THE USER REALLY WANTS TO EXIT
         Stage dialogStage = new Stage();
+        dialogStage.setTitle("Quit");
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(primaryStage);
         BorderPane exitPane = new BorderPane();
         HBox optionPane = new HBox();
         Button yesButton = new Button(options[0]);
+        yesButton.setFont(Font.font("Georgia", 12));
+        yesButton.setPrefWidth(60);
         Button noButton = new Button(options[1]);
-        optionPane.setSpacing(10.0);
+        noButton.setFont(Font.font("Georgia", 12));
+        noButton.setPrefWidth(60);
+        optionPane.setSpacing(15.0);
         optionPane.getChildren().addAll(yesButton, noButton);
         optionPane.setAlignment(Pos.CENTER);
         Label exitLabel = new Label(verifyExit);
+        exitLabel.setFont(Font.font("Georgia", 12));
         exitPane.setCenter(exitLabel);
         exitPane.setBottom(optionPane);
-        Scene scene = new Scene(exitPane, 300, 100);
+        exitPane.setPadding(new Insets(5, 5, 5, 5));
+        Scene scene = new Scene(exitPane, 180, 80);
         dialogStage.setScene(scene);
         dialogStage.show();
         // WHAT'S THE USER'S DECISION?
