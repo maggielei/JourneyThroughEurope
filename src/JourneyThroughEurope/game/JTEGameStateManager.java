@@ -35,7 +35,6 @@ public class JTEGameStateManager{
         makeNewGame();
     }
     public void makeNewGame() {
-        gameInProgress = new JTEGameData();
         currentGameState = JTEGameState.GAME_IN_PROGRESS;
     }
 }

@@ -29,12 +29,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javax.swing.JScrollPane;
-
+import javax.swing.ImageIcon;
 public class JTEUI extends Pane {
 
     private BorderPane getGamePanel() {
@@ -55,14 +55,11 @@ public class JTEUI extends Pane {
     private ImageView splashScreenImageView;
     private Pane splashScreenPane;
     private Label splashScreenImageLabel;
-    private HBox languageSelectionPane;
     private ArrayList<Button> languageButtons;
 
     // GamePane
     private Label HangManLabel;
     private Button newGameButton;
-    private HBox letterButtonsPane;
-    private HashMap<Character, Button> letterButtons;
     private BorderPane gamePanel = new BorderPane();
 
     //HelpPane
@@ -80,7 +77,14 @@ public class JTEUI extends Pane {
     // mainPane weight && height
     private int paneWidth;
     private int paneHeight;
-
+    
+    // splashScreen butons
+    private VBox startBar;
+    private Button gameButton;
+    private Button loadButton;
+    private Button helpButton;
+    private Button exitButton;
+    
     // THIS CLASS WILL HANDLE ALL ACTION EVENTS FOR THIS PROGRAM
     private JTEEventHandler eventHandler;
     JTEGameStateManager gsm;
@@ -124,8 +128,14 @@ public class JTEUI extends Pane {
         // INIT THE SPLASH SCREEN CONTROLS
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String splashScreenImagePath = props.getProperty(JTEPropertyType.SPLASH_SCREEN_IMAGE_NAME);
+        String gameButtonImagePath = props.getProperty(JTEPropertyType.GAME_IMG_NAME);
+        String loadButtonImagePath = props.getProperty(JTEPropertyType.LOAD_IMG_NAME);
+        String helpButtonImagePath = props.getProperty(JTEPropertyType.HELP_IMG_NAME);
+        String exitButtonImagePath = props.getProperty(JTEPropertyType.EXIT_IMG_NAME);
+        
         props.addProperty(JTEPropertyType.INSETS, "5");
         String str = props.getProperty(JTEPropertyType.INSETS);
+        
         splashScreenPane = new Pane();
         Image splashScreenImage = loadImage(splashScreenImagePath);
         splashScreenImageView = new ImageView(splashScreenImage);
@@ -133,26 +143,107 @@ public class JTEUI extends Pane {
         splashScreenImageLabel.setGraphic(splashScreenImageView);
         splashScreenImageLabel.setLayoutX(-45);
         splashScreenPane.getChildren().add(splashScreenImageLabel);
+
+        startBar = new VBox();
+        startBar.setSpacing(2.0);
+        startBar.setAlignment(Pos.CENTER);
+        startBar.setStyle("-fx-background-color:#FFFFFFF");
+        
+        // LOAD THE IMAGE
+        Image game = loadImage(gameButtonImagePath);
+        Image load = loadImage(loadButtonImagePath);
+        Image help = loadImage(helpButtonImagePath);
+        Image exit = loadImage(exitButtonImagePath);
+
+        ImageView gameIcon = new ImageView(game);
+        ImageView loadIcon = new ImageView(load);
+        ImageView helpIcon = new ImageView(help);
+        ImageView exitIcon = new ImageView(exit);
+        
+        gameButton = new Button();
+        loadButton = new Button();
+        helpButton = new Button();
+        exitButton = new Button();
+        
+        gameButton.setGraphic(gameIcon);
+        loadButton.setGraphic(loadIcon);
+        helpButton.setGraphic(helpIcon);
+        exitButton.setGraphic(exitIcon);
+        
+        startBar.getChildren().add(gameButton);
+        startBar.getChildren().add(loadButton);
+        startBar.getChildren().add(helpButton);
+        startBar.getChildren().add(exitButton);
+        
         mainPane.setCenter(splashScreenPane);
+        mainPane.setBottom(startBar);
     }
 
-    public void initJTEUI() {
+    public void initPlayerSelectUI() {
         // FIRST REMOVE THE SPLASH SCREEN
         mainPane.getChildren().clear();
         // GET THE UPDATED TITLE
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String title = props.getProperty(JTEPropertyType.GAME_TITLE_TEXT);
         primaryStage.setTitle(title);
-		// OUR WORKSPACE WILL STORE EITHER THE GAME, STATS,
+	// OUR WORKSPACE WILL STORE EITHER THE GAME, STATS,
         // OR HELP UI AT ANY ONE TIME
         initWorkspace();
         initGameScreen();
-        initHelpPane();
-        // WE'LL START OUT WITH THE GAME SCREEN
         changeWorkspace(JTEUIState.PLAY_GAME_STATE);
     }
+    
+//    private void initStartBar() {
+//		// MAKE THE START TOOLBAR, WHICH WILL HAVE FOUR BUTTONS
+//		startBar = new VBox();
+//		startBar.setStyle("-fx-background-color:#FFFFFFF");
+//		startBar.setAlignment(Pos.CENTER);
+//		startBar.setPadding(marginlessInsets);
+//		startBar.setSpacing(10.0);
+//
+//		// MAKE AND INIT THE GAME BUTTON
+//		gameButton = initToolbarButton(startBar,
+//				JTEPropertyType.GAME_IMG_NAME);
+//		setTooltip(gameButton, JTEPropertyType.GAME_TOOLTIP);
+//		gameButton.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent event) {
+//				// TODO Auto-generated method stub
+//				eventHandler.respondToSwitchScreenRequest(JTEUIState.PLAY_GAME_STATE);
+//			}
+//		});
+//		// MAKE AND INIT THE HELP BUTTON
+//		helpButton = initToolbarButton(startBar,
+//				JTEPropertyType.HELP_IMG_NAME);
+//		setTooltip(helpButton, JTEPropertyType.HELP_TOOLTIP);
+//		helpButton.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent event) {
+//				// TODO Auto-generated method stub
+//				eventHandler.respondToSwitchScreenRequest(JTEUIState.VIEW_HELP_STATE);
+//			}
+//
+//		});
+//		// MAKE AND INIT THE EXIT BUTTON
+//		exitButton = initToolbarButton(startBar,
+//				JTEPropertyType.EXIT_IMG_NAME);
+//		setTooltip(exitButton, JTEPropertyType.EXIT_TOOLTIP);
+//		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent event) {
+//				// TODO Auto-generated method stub
+//				eventHandler.respondToExitRequest(primaryStage);
+//			}
+//
+//		});
+//		
+//		// AND NOW PUT THE NORTH TOOLBAR IN THE FRAME
+//		mainPane.setCenter(startBar);
+//		//mainPane.getChildren().add(northToolbar);
+//	}
 
-    private Button initToolbarButton(HBox toolbar, JTEPropertyType prop) {
+    private Button initToolbarButton(VBox toolbar, JTEPropertyType prop) {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String imageName = props.getProperty(prop);
         // LOAD THE IMAGE
