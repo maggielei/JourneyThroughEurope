@@ -5,7 +5,7 @@ import application.Main.JTEPropertyType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import JourneyThroughEurope.file.JTEFileLoader;
+import java.awt.GridLayout;
 import JourneyThroughEurope.game.JTEGameData;
 import JourneyThroughEurope.game.JTEGameStateManager;
 import application.Main.JTEPropertyType;
@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -25,11 +26,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javax.swing.ImageIcon;
-
+import javafx.scene.control.*;
+import java.awt.Canvas;
+import javafx.scene.paint.Color;
 public class JTEUI extends Pane {
     private BorderPane getGamePanel() {
         return gamePanel;
@@ -56,7 +60,8 @@ public class JTEUI extends Pane {
     
     // Player Select Pane
     private BorderPane playerSelectPane = new BorderPane();
-    
+    private BorderPane playerPanel = new BorderPane();
+    private GridPane playerGrid = new GridPane();
     //HelpPane
     private BorderPane helpPanel;
     private BorderPane helpPane;
@@ -89,7 +94,7 @@ public class JTEUI extends Pane {
         eventHandler = new JTEEventHandler(this);
         initMainPane();
         initSplashScreen();
-        //initPlayerSelectUI();
+        
     }
     public void SetStage(Stage stage) {
         primaryStage = stage;
@@ -167,7 +172,7 @@ public class JTEUI extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 // TODO Auto-generated method stub
-                eventHandler.respondToSwitchScreenRequest(JTEUIState.PLAYER_SELECT_STATE);
+                eventHandler.respondToPlayerSelectRequest();
             }
         });
         loadButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -206,18 +211,86 @@ public class JTEUI extends Pane {
         mainPane.setCenter(workspace);
     }
     public void initPlayerSelectUI() {
-        // FIRST REMOVE THE SPLASH SCREEN
         mainPane.getChildren().clear();
-        // GET THE UPDATED TITLE
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        primaryStage.setTitle("Select Players");
-        // OUR WORKSPACE WILL STORE EITHER THE GAME, STATS,
-        // OR HELP UI AT ANY ONE TIME
         initWorkspace();
-        //initGameScreen();
-        //changeWorkspace(JTEUIState.PLAY_GAME_STATE);
+        primaryStage.setTitle("Select Players");
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        
+        ComboBox playerComboBox = new ComboBox();
+        playerComboBox.getItems().addAll(
+                "1 Player",
+                "2 Players",
+                "3 Players",
+                "4 Players",
+                "5 Players",
+                "6 Players"
+        );
+        GridPane playerGrid = new GridPane();
+        playerGrid.setVgap(150);
+        playerGrid.setHgap(150);
+        playerGrid.setPadding(new Insets(10,10,10,10));
+        Label numPlayers = new Label("Number of Players:");
+        numPlayers.setFont(Font.font("Georgia", 16));
+        Button startButton = new Button("Start!");
+        startButton.setFont(Font.font("Georgia", 16));
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                eventHandler.respondToStartRequest();
+            }
+        });
+        
+        Pane player1 = createPlayerPane();
+        Pane player2 = createPlayerPane();
+        Pane player3 = createPlayerPane();
+        Pane player4 = createPlayerPane();
+        Pane player5 = createPlayerPane();
+        Pane player6 = createPlayerPane();
+        
+        playerGrid.add(numPlayers, 0, 0);
+        playerGrid.add(playerComboBox, 1, 0);
+        playerGrid.add(startButton, 2, 0);
+        playerGrid.add(player1, 0, 1);
+        playerGrid.add(player2, 1, 1);
+        playerGrid.add(player3, 2, 1);
+        playerGrid.add(player4, 0, 2);
+        playerGrid.add(player5, 1, 2);
+        playerGrid.add(player6, 2, 2);
+        workspace.getChildren().add(playerGrid);
     }
-    private void initHelpPane() {
+    public Pane createPlayerPane(){
+        Pane playerPane = new Pane();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String backPatternPath = props.getProperty(JTEPropertyType.BACK_PATTERN_NAME);
+        Image backImage = loadImage(backPatternPath);
+        ImageView backImageView = new ImageView(backImage);
+        VBox option = new VBox();
+        ToggleGroup group = new ToggleGroup();
+        option.setSpacing(5);
+        RadioButton rb1 = new RadioButton("Player");
+        option.getChildren().add(rb1);
+        rb1.setToggleGroup(group);
+        rb1.setFont(Font.font("Georgia", 12));
+        rb1.setTextFill(Color.WHITE);
+        RadioButton rb2 = new RadioButton("Computer");
+        option.getChildren().add(rb2);
+        rb2.setFont(Font.font("Georgia", 12));
+        rb2.setTextFill(Color.WHITE);
+        rb2.setToggleGroup(group);
+        Label nameLabel = new Label("Name:");
+        nameLabel.setFont(Font.font("Georgia", 12));
+        nameLabel.setTextFill(Color.WHITE);
+        
+        TextField nameField = new TextField();
+        option.setPrefSize(150,150);
+        option.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPatternPath));
+        option.getChildren().add(nameLabel);
+        option.getChildren().add(nameField);
+        playerPane.getChildren().add(option);
+        return playerPane;
+    }
+    public void initHelpPane() {
         // MAKE THE HELP BUTTON
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         HBox helpToolbar = new HBox();
@@ -249,20 +322,28 @@ public class JTEUI extends Pane {
         button.setTooltip(toolTip);
     }
     BorderPane gamePane;
-    private void initGameScreen() {
+    public void initGameScreen() {
+        mainPane.getChildren().clear();
+        initWorkspace();
         PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String map1ImagePath = props.getProperty(JTEPropertyType.MAP1_IMAGE_NAME);
         gamePane = new BorderPane();
-        workspace.getChildren().add(gamePanel);
+        Pane centerPane = new Pane();
+        VBox gameOptions = new VBox();
+        Image map1Image = loadImage(map1ImagePath);
+        ImageView map1ImageView = new ImageView(map1Image);
+        centerPane.getChildren().add(map1ImageView);
+        gamePane.setCenter(centerPane);
+        gamePane.setRight(gameOptions);
+        workspace.getChildren().add(gamePane);
     }
     public void changeWorkspace(JTEUIState uiScreen) {
         if (uiScreen == JTEUIState.VIEW_HELP_STATE) {
             mainPane.setCenter(helpPanel);
         } else if (uiScreen == JTEUIState.PLAY_GAME_STATE) {
-            mainPane.setCenter(gamePanel);
+            mainPane.setCenter(gamePane);
         } else if (uiScreen == JTEUIState.SPLASH_SCREEN_STATE) {
             mainPane.setCenter(splashScreenPane);
-        } else if (uiScreen == JTEUIState.PLAYER_SELECT_STATE){
-            mainPane.setCenter(playerSelectPane);
         }
     }
 }

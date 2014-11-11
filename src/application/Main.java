@@ -1,7 +1,10 @@
 package application;
 
+import JourneyThroughEurope.game.JTECities;
+import JourneyThroughEurope.game.JTEGameData;
 import properties_manager.PropertiesManager;
 import JourneyThroughEurope.ui.JTEUI;
+import java.util.List;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.stage.Stage;
@@ -31,6 +34,14 @@ public class Main extends Application {
             props.loadProperties(UI_PROPERTIES_FILE_NAME,
                     PROPERTIES_SCHEMA_FILE_NAME);
 
+            // DEBUG
+            List<List<JTECities>> quarters = JTEGameData.loadCities();
+            for(List quarter : quarters){
+                for(int i = 0; i < quarter.size(); i++) {
+                    System.out.println(quarter.get(i).toString());
+                }
+            }
+            
             // GET THE LOADED TITLE AND SET IT IN THE FRAME
             String title = props.getProperty(JTEPropertyType.SPLASH_SCREEN_TITLE_TEXT);
             primaryStage.setTitle(title);
@@ -62,13 +73,15 @@ public class Main extends Application {
 
         UI_PROPERTIES_FILE_NAME, PROPERTIES_SCHEMA_FILE_NAME,
         /* DIRECTORIES FOR FILE LOADING */
-        DATA_PATH, IMG_PATH,
+        DATA_PATH, IMG_PATH, CITIES_PATH,
         /* WINDOW DIMENSIONS */
         WINDOW_WIDTH, WINDOW_HEIGHT,
         /* GAME TEXT */
         SPLASH_SCREEN_TITLE_TEXT, GAME_TITLE_TEXT, GAME_SUBHEADER_TEXT, WIN_DISPLAY_TEXT, LOSE_DISPLAY_TEXT, GAME_RESULTS_TEXT, GUESS_LABEL, LETTER_OPTIONS, EXIT_REQUEST_TEXT, YES_TEXT, NO_TEXT, DEFAULT_YES_TEXT, DEFAULT_NO_TEXT, DEFAULT_EXIT_TEXT,
         /* IMAGE FILE NAMES */
-        WINDOW_ICON, SPLASH_SCREEN_IMAGE_NAME, GAME_IMG_NAME, LOAD_IMG_NAME, HELP_IMG_NAME, EXIT_IMG_NAME, NEW_GAME_IMG_NAME, HOME_IMG_NAME, HANGMAN0_IMG_NAME, HANGMAN1_IMG_NAME, HANGMAN2_IMG_NAME, HANGMAN3_IMG_NAME, HANGMAN4_IMG_NAME, HANGMAN5_IMG_NAME, HANGMAN6_IMG_NAME,
+        WINDOW_ICON, SPLASH_SCREEN_IMAGE_NAME, GAME_IMG_NAME, LOAD_IMG_NAME, HELP_IMG_NAME, EXIT_IMG_NAME, BACK_PATTERN_NAME, MAP1_IMAGE_NAME,
+        /* PLAYER FILE NAMES */
+        PLAYER1_IMG_NAME, PLAYER2_IMG_NAME, PLAYER3_IMG_NAME, PLAYER4_IMG_NAME, PLAYER5_IMG_NAME, PLAYER6_IMG_NAME,
         /* DATA FILE STUFF */
         GAME_FILE_NAME, STATS_FILE_NAME, HELP_FILE_NAME, WORD_LIST_FILE_NAME,
         /* TOOLTIPS */

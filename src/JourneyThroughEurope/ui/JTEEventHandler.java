@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import application.Main.JTEPropertyType;
 import properties_manager.PropertiesManager;
 import xml_utilities.InvalidXMLFileFormatException;
-import JourneyThroughEurope.file.JTEFileLoader;
 import JourneyThroughEurope.game.JTEGameStateManager;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
@@ -26,8 +25,17 @@ public class JTEEventHandler {
     public JTEEventHandler(JTEUI initUI) {
         ui = initUI;
     }
+    public void respondToPlayerSelectRequest(){
+        ui.initPlayerSelectUI();
+    }
     public void respondToSwitchScreenRequest(JTEUI.JTEUIState uiState) {
         ui.changeWorkspace(uiState);
+    }
+    public void respondToStartRequest(){
+        ui.initGameScreen();
+    }
+    public void respondToAboutRequest(){
+        ui.initHelpPane();
     }
     public void respondToExitRequest(Stage primaryStage) {
         // ENGLISH IS THE DEFAULT

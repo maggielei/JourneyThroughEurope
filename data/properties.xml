@@ -12,6 +12,7 @@
         <property name="SPLASH_SCREEN_IMAGE_NAME"   value="JTESplashScreen.png"></property>
         <property name="DATA_PATH"                  value="./data/"></property>
         <property name="IMG_PATH"                   value="./img/"></property>
+		<property name="CITIES_PATH"				value="./data/cities.csv"></property>
 
 		<property name="EXIT_REQUEST_TEXT"      	value="Are you sure you wish to quit?"></property>
         <property name="YES_TEXT"               	value="Yes"></property>
@@ -22,6 +23,15 @@
         <property name="LOAD_IMG_NAME"          	value="Load.png"></property>
         <property name="HELP_IMG_NAME"          	value="Help.png"></property>
         <property name="EXIT_IMG_NAME"          	value="Exit.png"></property>
+		<property name="PLAYER1_IMG_NAME"			value="flag_black.png"></property>
+		<property name="PLAYER2_IMG_NAME"			value="flag_yellow.png"></property>
+		<property name="PLAYER3_IMG_NAME"			value="flag_blue.png"></property>
+		<property name="PLAYER4_IMG_NAME"			value="flag_red.png"></property>
+		<property name="PLAYER5_IMG_NAME"			value="flag_green.png"></property>
+		<property name="PLAYER6_IMG_NAME"			value="flag_white.png"></property>
+		<property name="BACK_PATTERN_NAME"			value="pattern.png"></property>
+		<property name="MAP1_IMAGE_NAME"			value="map1.jpeg"></property>
+		<property name="MAP2_IMAGE_NAME"			value="map2.png"></property>
 		
 		 <!-- TOOLTIPS -->
         <property name="GAME_TOOLTIP"          		value="Go to Game Screen"></property>
