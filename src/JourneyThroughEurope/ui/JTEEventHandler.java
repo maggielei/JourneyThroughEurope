@@ -35,7 +35,11 @@ public class JTEEventHandler {
         ui.initGameScreen();
     }
     public void respondToAboutRequest(){
-        ui.initHelpPane();
+        //ui.initHelpPane();
+        ui.getHelpPane().setVisible(true);
+    }
+    public void respondToHistoryRequest(){
+        ui.initHistoryScreen();
     }
     public void respondToExitRequest(Stage primaryStage) {
         // ENGLISH IS THE DEFAULT

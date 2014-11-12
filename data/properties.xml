@@ -13,6 +13,7 @@
         <property name="DATA_PATH"                  value="./data/"></property>
         <property name="IMG_PATH"                   value="./img/"></property>
 		<property name="CITIES_PATH"				value="./data/cities.csv"></property>
+		<property name="FXML_PATH"					value="./src/JourneyThroughEurope/ui/GameScreenUI.fxml"></property>
 
 		<property name="EXIT_REQUEST_TEXT"      	value="Are you sure you wish to quit?"></property>
         <property name="YES_TEXT"               	value="Yes"></property>
@@ -29,9 +30,14 @@
 		<property name="PLAYER4_IMG_NAME"			value="flag_red.png"></property>
 		<property name="PLAYER5_IMG_NAME"			value="flag_green.png"></property>
 		<property name="PLAYER6_IMG_NAME"			value="flag_white.png"></property>
-		<property name="BACK_PATTERN_NAME"			value="pattern.png"></property>
-		<property name="MAP1_IMAGE_NAME"			value="map1.jpeg"></property>
+		<property name="BACK_PATTERN_NAME"			value="pattern.jpg"></property>
+		<property name="MAP1_IMAGE_NAME"			value="map1.jpg"></property>
 		<property name="MAP2_IMAGE_NAME"			value="map2.png"></property>
+		<property name="ABOUT_NAME"					value="About.png"></property>
+		<property name="BACK_NAME"					value="Back.png"></property>
+		<property name="FLIGHT_PLAN"				value="FlightPlan.png"></property>
+		<property name="GAME_HISTORY"				value="GameHistory.png"></property>
+		<property name="SAVE_NAME"					value="Save.png"></property>
 		
 		 <!-- TOOLTIPS -->
         <property name="GAME_TOOLTIP"          		value="Go to Game Screen"></property>

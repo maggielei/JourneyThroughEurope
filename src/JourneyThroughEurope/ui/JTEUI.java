@@ -1,40 +1,37 @@
 package JourneyThroughEurope.ui;
 
-import application.Main;
+import javafx.application.Application;
 import application.Main.JTEPropertyType;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.awt.GridLayout;
-import JourneyThroughEurope.game.JTEGameData;
 import JourneyThroughEurope.game.JTEGameStateManager;
-import application.Main.JTEPropertyType;
+import java.net.URL;
 import properties_manager.PropertiesManager;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javax.swing.ImageIcon;
 import javafx.scene.control.*;
-import java.awt.Canvas;
 import javafx.scene.paint.Color;
-public class JTEUI extends Pane {
+import javafx.scene.transform.Scale;
+import javafx.scene.Parent;
+
+public class JTEUI extends Pane{
     private BorderPane getGamePanel() {
         return gamePanel;
     }
@@ -94,7 +91,6 @@ public class JTEUI extends Pane {
         eventHandler = new JTEEventHandler(this);
         initMainPane();
         initSplashScreen();
-        
     }
     public void SetStage(Stage stage) {
         primaryStage = stage;
@@ -186,7 +182,7 @@ public class JTEUI extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 // TODO Auto-generated method stub
-                eventHandler.respondToSwitchScreenRequest(JTEUIState.VIEW_HELP_STATE);
+                eventHandler.respondToAboutRequest();
             }
         });
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -215,7 +211,6 @@ public class JTEUI extends Pane {
         initWorkspace();
         primaryStage.setTitle("Select Players");
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        
         ComboBox playerComboBox = new ComboBox();
         playerComboBox.getItems().addAll(
                 "1 Player",
@@ -226,11 +221,14 @@ public class JTEUI extends Pane {
                 "6 Players"
         );
         GridPane playerGrid = new GridPane();
-        playerGrid.setVgap(150);
-        playerGrid.setHgap(150);
+        playerGrid.setVgap(10);
+        playerGrid.setHgap(10);
         playerGrid.setPadding(new Insets(10,10,10,10));
+        String backPatternPath = props.getProperty(JTEPropertyType.BACK_PATTERN_NAME);     
+        playerGrid.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPatternPath));
         Label numPlayers = new Label("Number of Players:");
         numPlayers.setFont(Font.font("Georgia", 16));
+        numPlayers.setTextFill(Color.WHITE);
         Button startButton = new Button("Start!");
         startButton.setFont(Font.font("Georgia", 16));
         startButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -257,17 +255,17 @@ public class JTEUI extends Pane {
         playerGrid.add(player4, 0, 2);
         playerGrid.add(player5, 1, 2);
         playerGrid.add(player6, 2, 2);
+        playerGrid.setPrefSize(820, 600);
         workspace.getChildren().add(playerGrid);
     }
     public Pane createPlayerPane(){
         Pane playerPane = new Pane();
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String backPatternPath = props.getProperty(JTEPropertyType.BACK_PATTERN_NAME);
-        Image backImage = loadImage(backPatternPath);
-        ImageView backImageView = new ImageView(backImage);
+        //playerPane.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPatternPath));
+        playerPane.setStyle("-fx-background-color: transparent");
         VBox option = new VBox();
         ToggleGroup group = new ToggleGroup();
-        option.setSpacing(5);
+        option.setSpacing(10);
         RadioButton rb1 = new RadioButton("Player");
         option.getChildren().add(rb1);
         rb1.setToggleGroup(group);
@@ -283,8 +281,8 @@ public class JTEUI extends Pane {
         nameLabel.setTextFill(Color.WHITE);
         
         TextField nameField = new TextField();
-        option.setPrefSize(150,150);
-        option.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPatternPath));
+        option.setPadding(new Insets(50));
+        option.setPrefSize(240, 240);
         option.getChildren().add(nameLabel);
         option.getChildren().add(nameField);
         playerPane.getChildren().add(option);
@@ -292,22 +290,35 @@ public class JTEUI extends Pane {
     }
     public void initHelpPane() {
         // MAKE THE HELP BUTTON
+        initWorkspace();
+        primaryStage.setTitle("About");
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        HBox helpToolbar = new HBox();
-        helpToolbar.setAlignment(Pos.TOP_CENTER);
-        helpPanel = new BorderPane();
-        helpPanel.setTop(helpToolbar);
-        helpPanel.setPrefSize(800, 800);
-        helpToolbar.getChildren().add(homeButton);
-        helpToolbar.setStyle("-fx-background-color:#85cff9");
-        // LET OUR HELP PAGE GO HOME VIA THE HOME BUTTON
-        homeButton.setOnAction(new EventHandler<ActionEvent>() {
+        String aboutPath = props.getProperty(JTEPropertyType.ABOUT_NAME);
+        Image aboutImage = loadImage(aboutPath);
+        ImageView aboutImageView = new ImageView(aboutImage);
+        Pane aboutPane = new Pane();
+        Label about = new Label();
+        about.setGraphic(aboutImageView);
+        //about.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + aboutPath));
+        //about.setPrefSize(820,600);
+        aboutPane.getChildren().add(about);
+        
+        String backPath = props.getProperty(JTEPropertyType.BACK_NAME);
+        Image backImage = loadImage(backPath);
+        ImageView backImageView = new ImageView(backImage);
+        Button backButton = new Button();
+        //backButton.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPath));
+        backButton.setGraphic(backImageView);
+        backButton.setStyle("-fx-background-color: transparent;");
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 // TODO Auto-generated method stub
-                changeWorkspace(JTEUIState.SPLASH_SCREEN_STATE);
+                eventHandler.respondToSwitchScreenRequest(JTEUIState.SPLASH_SCREEN_STATE);
             }
         });
+        aboutPane.getChildren().add(backButton);
+        workspace.getChildren().add(aboutPane);
     }
     public Image loadImage(String imageName) {
         Image img = new Image(ImgPath + imageName);
@@ -321,22 +332,88 @@ public class JTEUI extends Pane {
         // button.setToolTipText(tooltipText);
         button.setTooltip(toolTip);
     }
+    public void initHistoryScreen(){
+        initWorkspace();
+        primaryStage.setTitle("History");
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String historyPath = props.getProperty(JTEPropertyType.GAME_HISTORY);
+        Image historyImage = loadImage(historyPath);
+        ImageView historyImageView = new ImageView(historyImage);
+        Pane historyPane = new Pane();
+        Label history = new Label();
+        history.setGraphic(historyImageView);
+        //about.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + aboutPath));
+        //about.setPrefSize(820,600);
+        historyPane.getChildren().add(history);
+        
+        String backPath = props.getProperty(JTEPropertyType.BACK_NAME);
+        Image backImage = loadImage(backPath);
+        ImageView backImageView = new ImageView(backImage);
+        Button backButton = new Button();
+        //backButton.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPath));
+        backButton.setGraphic(backImageView);
+        backButton.setStyle("-fx-background-color: transparent;");
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                eventHandler.respondToSwitchScreenRequest(JTEUIState.PLAY_GAME_STATE);
+            }
+        });
+        
+        historyPane.getChildren().add(backButton);
+        workspace.getChildren().add(historyPane);
+    }
     BorderPane gamePane;
     public void initGameScreen() {
         mainPane.getChildren().clear();
         initWorkspace();
+        primaryStage.setTitle("Journey Through Europe");
         PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String fxmlPath = props.getProperty(JTEPropertyType.FXML_PATH);
+        URL location = getClass().getResource("GameScreenUI.fxml");
+        System.out.println(location);
+
+        BorderPane gamePane = new BorderPane();
+        String backPatternPath = props.getProperty(JTEPropertyType.BACK_PATTERN_NAME);
         String map1ImagePath = props.getProperty(JTEPropertyType.MAP1_IMAGE_NAME);
-        gamePane = new BorderPane();
-        Pane centerPane = new Pane();
-        VBox gameOptions = new VBox();
+        gamePane.setStyle(String.format("-fx-background-image: url('%s');", ImgPath + backPatternPath));
+        Image backPatternImage = loadImage(backPatternPath);
+        ImageView backImageView = new ImageView(backPatternImage);
+        gamePane.getChildren().add(backImageView);
         Image map1Image = loadImage(map1ImagePath);
         ImageView map1ImageView = new ImageView(map1Image);
-        centerPane.getChildren().add(map1ImageView);
-        gamePane.setCenter(centerPane);
+        map1ImageView.setFitHeight(580);
+        map1ImageView.setPreserveRatio(true);
+
+        VBox gameOptions = new VBox();
+        Button aboutButton = new Button("About");
+        Button historyButton = new Button("Game History");
+
+        aboutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                eventHandler.respondToAboutRequest();
+            }
+        });
+        
+        historyButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                eventHandler.respondToHistoryRequest();
+            }
+        });
+        
+        gameOptions.getChildren().add(aboutButton);
+        gameOptions.getChildren().add(historyButton);
         gamePane.setRight(gameOptions);
+        gamePane.setCenter(map1ImageView);
+        gamePane.setPrefSize(820, 600);
         workspace.getChildren().add(gamePane);
     }
+    
     public void changeWorkspace(JTEUIState uiScreen) {
         if (uiScreen == JTEUIState.VIEW_HELP_STATE) {
             mainPane.setCenter(helpPanel);
@@ -344,6 +421,7 @@ public class JTEUI extends Pane {
             mainPane.setCenter(gamePane);
         } else if (uiScreen == JTEUIState.SPLASH_SCREEN_STATE) {
             mainPane.setCenter(splashScreenPane);
+            mainPane.setBottom(startBar);
         }
     }
 }
