@@ -36,12 +36,12 @@ public class Main extends Application {
 
             // DEBUG
             List<List<JTECities>> quarters = JTEGameData.loadCities();
-            for(List quarter : quarters){
-                for(int i = 0; i < quarter.size(); i++) {
+            for (List quarter : quarters) {
+                for (int i = 0; i < quarter.size(); i++) {
                     System.out.println(quarter.get(i).toString());
                 }
             }
-            
+
             // GET THE LOADED TITLE AND SET IT IN THE FRAME
             String title = props.getProperty(JTEPropertyType.SPLASH_SCREEN_TITLE_TEXT);
             primaryStage.setTitle(title);
@@ -73,7 +73,7 @@ public class Main extends Application {
 
         UI_PROPERTIES_FILE_NAME, PROPERTIES_SCHEMA_FILE_NAME,
         /* DIRECTORIES FOR FILE LOADING */
-        DATA_PATH, IMG_PATH, CITIES_PATH, FXML_PATH, ABOUT_NAME,BACK_NAME, FLIGHT_PLAN, GAME_HISTORY,SAVE_NAME,
+        DATA_PATH, IMG_PATH, CITIES_PATH, FXML_PATH, ABOUT_NAME, BACK_NAME, FLIGHT_PLAN, GAME_HISTORY, SAVE_NAME,
         /* WINDOW DIMENSIONS */
         WINDOW_WIDTH, WINDOW_HEIGHT,
         /* GAME TEXT */

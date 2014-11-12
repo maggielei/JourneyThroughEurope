@@ -290,6 +290,7 @@ public class JTEUI extends Pane{
     }
     public void initHelpPane() {
         // MAKE THE HELP BUTTON
+        mainPane.getChildren().clear();
         initWorkspace();
         primaryStage.setTitle("About");
         PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -336,7 +337,7 @@ public class JTEUI extends Pane{
         initWorkspace();
         primaryStage.setTitle("History");
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String historyPath = props.getProperty(JTEPropertyType.GAME_HISTORY);
+        String historyPath = props.getProperty(JTEPropertyType.BACK_PATTERN_NAME);
         Image historyImage = loadImage(historyPath);
         ImageView historyImageView = new ImageView(historyImage);
         Pane historyPane = new Pane();
@@ -360,7 +361,6 @@ public class JTEUI extends Pane{
                 eventHandler.respondToSwitchScreenRequest(JTEUIState.PLAY_GAME_STATE);
             }
         });
-        
         historyPane.getChildren().add(backButton);
         workspace.getChildren().add(historyPane);
     }

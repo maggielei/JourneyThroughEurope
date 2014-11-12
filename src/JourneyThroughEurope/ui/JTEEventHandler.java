@@ -35,8 +35,7 @@ public class JTEEventHandler {
         ui.initGameScreen();
     }
     public void respondToAboutRequest(){
-        //ui.initHelpPane();
-        ui.getHelpPane().setVisible(true);
+        ui.initHelpPane();
     }
     public void respondToHistoryRequest(){
         ui.initHistoryScreen();
