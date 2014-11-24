@@ -35,12 +35,12 @@ public class Main extends Application {
                     PROPERTIES_SCHEMA_FILE_NAME);
 
             // DEBUG
-            List<List<JTECities>> quarters = JTEGameData.loadCities();
-            for (List quarter : quarters) {
-                for (int i = 0; i < quarter.size(); i++) {
-                    System.out.println(quarter.get(i).toString());
-                }
-            }
+//            List<List<JTECities>> quarters = JTEGameData.loadCities();
+//            for (List quarter : quarters) {
+//                for (int i = 0; i < quarter.size(); i++) {
+//                    System.out.println(quarter.get(i).toString());
+//                }
+//            }
 
             // GET THE LOADED TITLE AND SET IT IN THE FRAME
             String title = props.getProperty(JTEPropertyType.SPLASH_SCREEN_TITLE_TEXT);

@@ -37,6 +37,7 @@ public class JTEEventHandler {
     public void respondToAboutRequest(){
         ui.initHelpPane();
     }
+
     public void respondToHistoryRequest(){
         ui.initHistoryScreen();
     }

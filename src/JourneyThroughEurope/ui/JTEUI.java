@@ -1,10 +1,13 @@
 package JourneyThroughEurope.ui;
 
+import JourneyThroughEurope.game.JTECities;
+import JourneyThroughEurope.game.JTEGameData;
 import javafx.application.Application;
 import application.Main.JTEPropertyType;
 import java.util.ArrayList;
 import JourneyThroughEurope.game.JTEGameStateManager;
 import java.net.URL;
+import java.util.List;
 import properties_manager.PropertiesManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,7 +33,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.scene.Parent;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
 public class JTEUI extends Pane{
     private BorderPane getGamePanel() {
         return gamePanel;
@@ -358,7 +362,7 @@ public class JTEUI extends Pane{
             @Override
             public void handle(ActionEvent event) {
                 // TODO Auto-generated method stub
-                eventHandler.respondToSwitchScreenRequest(JTEUIState.PLAY_GAME_STATE);
+                eventHandler.respondToSwitchScreenRequest(JTEUIState.SPLASH_SCREEN_STATE);
             }
         });
         historyPane.getChildren().add(backButton);
@@ -370,10 +374,10 @@ public class JTEUI extends Pane{
         initWorkspace();
         primaryStage.setTitle("Journey Through Europe");
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String fxmlPath = props.getProperty(JTEPropertyType.FXML_PATH);
-        URL location = getClass().getResource("GameScreenUI.fxml");
-        System.out.println(location);
-
+//        String fxmlPath = props.getProperty(JTEPropertyType.FXML_PATH);
+//        URL location = getClass().getResource("GameScreenUI.fxml");
+//        System.out.println(location);
+        
         BorderPane gamePane = new BorderPane();
         String backPatternPath = props.getProperty(JTEPropertyType.BACK_PATTERN_NAME);
         String map1ImagePath = props.getProperty(JTEPropertyType.MAP1_IMAGE_NAME);
@@ -385,11 +389,72 @@ public class JTEUI extends Pane{
         ImageView map1ImageView = new ImageView(map1Image);
         map1ImageView.setFitHeight(580);
         map1ImageView.setPreserveRatio(true);
-
+  
         VBox gameOptions = new VBox();
-        Button aboutButton = new Button("About");
-        Button historyButton = new Button("Game History");
+        Button flightButton = new Button();
+        Button saveButton = new Button();
+        Button aboutButton = new Button();
+        Button historyButton = new Button();
+        
+        String aboutButtonPath = props.getProperty(JTEPropertyType.HELP_IMG_NAME);
+        String flightButtonPath = props.getProperty(JTEPropertyType.FLIGHT_PLAN);
+        String historyButtonPath = props.getProperty(JTEPropertyType.GAME_HISTORY);
+        String saveButtonPath = props.getProperty(JTEPropertyType.SAVE_NAME);
+        
+        Image aboutImage = loadImage(aboutButtonPath);
+        Image flightImage = loadImage(flightButtonPath);
+        Image historyImage = loadImage(historyButtonPath);
+        Image saveImage = loadImage(saveButtonPath);
+        
+        ImageView aboutImageView = new ImageView(aboutImage);
+        ImageView flightImageView = new ImageView(flightImage);
+        ImageView historyImageView = new ImageView(historyImage);
+        ImageView saveImageView = new ImageView(saveImage);
+        
+        flightButton.setGraphic(flightImageView);
+        saveButton.setGraphic(saveImageView);
+        historyButton.setGraphic(historyImageView);
+        aboutButton.setGraphic(aboutImageView);
+        flightButton.setStyle("-fx-background-color: transparent;");
+        saveButton.setStyle("-fx-background-color: transparent;");
+        historyButton.setStyle("-fx-background-color: transparent;");
+        aboutButton.setStyle("-fx-background-color: transparent;");
 
+//        List<List<JTECities>> quarters = JTEGameData.loadCities();
+//        for (List quarter : quarters) {
+//            for (int i = 0; i < quarter.size(); i++) {
+//                System.out.println(quarter.get(i).toString());
+//                
+//            }
+//        }
+//     
+        String CityPath = props.getProperty(JTEPropertyType.CITIES_PATH);
+        int thisCity = 0;
+        String line = "";
+        String split = ",";
+        Button[] city = new Button[50];
+        
+        try{
+            BufferedReader cities = new BufferedReader(new FileReader(CityPath));
+            while((line = cities.readLine()) != null){
+                String[] input = line.split(split);
+                if(input[2].equals("1")){
+                    city[thisCity] = new Button();
+                    city[thisCity].setOpacity(.5);
+                    city[thisCity].setPadding(new Insets(0,5,0,10));
+                    city[thisCity].setLayoutX(Double.parseDouble(input[3])/4.429 - 7);
+                    city[thisCity].setLayoutY(Double.parseDouble(input[4])/4.429 - 7);
+                    city[thisCity].setOnAction((ActionEvent event) ->{
+                        System.out.println(input[0]);
+                        });
+                    thisCity++;
+                }
+            }
+        }
+        catch(Exception E){
+            E.printStackTrace();
+        }
+        
         aboutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -406,12 +471,22 @@ public class JTEUI extends Pane{
             }
         });
         
-        gameOptions.getChildren().add(aboutButton);
+        gameOptions.getChildren().add(flightButton);
         gameOptions.getChildren().add(historyButton);
+        gameOptions.getChildren().add(aboutButton);
+        gameOptions.getChildren().add(saveButton);
+        
+        Pane mapShits = new Pane();
+        
+        mapShits.getChildren().add(map1ImageView);
+        for(int i = 0; i < thisCity; i++){
+            mapShits.getChildren().add(city[i]);
+        }
         gamePane.setRight(gameOptions);
-        gamePane.setCenter(map1ImageView);
+        gamePane.setCenter(mapShits);
         gamePane.setPrefSize(820, 600);
         workspace.getChildren().add(gamePane);
+        
     }
     
     public void changeWorkspace(JTEUIState uiScreen) {

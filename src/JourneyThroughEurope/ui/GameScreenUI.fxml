@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="820.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JourneyThroughEurope.ui.GameScreenUIController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="820.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JourneyThroughEurope.ui.GameScreenController">
     <stylesheets>
         <URL value="@gamescreenui.css" />
     </stylesheets>
@@ -20,14 +20,14 @@
       </ImageView>
       <AnchorPane layoutX="176.0" prefHeight="600.0" prefWidth="458.0">
          <children>
-            <ImageView fitHeight="600.0" fitWidth="469.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="quadrant" fitHeight="600.0" fitWidth="469.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/map1.jpg" />
                </image>
             </ImageView>
          </children>
       </AnchorPane>
-      <Button graphicTextGap="0.0" layoutX="676.0" layoutY="385.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+      <Button fx:id="FlightPlanButton" graphicTextGap="0.0" layoutX="676.0" layoutY="385.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="44.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -36,7 +36,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button graphicTextGap="0.0" layoutX="676.0" layoutY="427.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="110.0" style="-fx-background-color: transparent;">
+      <Button fx:id="GameHistoryButton" graphicTextGap="0.0" layoutX="676.0" layoutY="427.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="110.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="33.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -45,7 +45,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button graphicTextGap="0.0" layoutX="676.0" layoutY="469.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="110.0" style="-fx-background-color: transparent;">
+      <Button fx:id="AboutButton" graphicTextGap="0.0" layoutX="676.0" layoutY="469.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="110.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="37.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -54,7 +54,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button graphicTextGap="0.0" layoutX="676.0" layoutY="517.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="110.0" style="-fx-background-color: transparent;">
+      <Button fx:id="SaveButton" graphicTextGap="0.0" layoutX="676.0" layoutY="517.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="110.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="39.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -63,12 +63,12 @@
             </ImageView>
          </graphic>
       </Button>
-      <ImageView fitHeight="202.0" fitWidth="137.0" layoutX="649.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="Map" fitHeight="202.0" fitWidth="137.0" layoutX="649.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/gridselect.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="112.0" fitWidth="110.0" layoutX="676.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="Dice" fitHeight="112.0" fitWidth="110.0" layoutX="676.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/die_1.jpg" />
          </image>

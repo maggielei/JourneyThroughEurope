@@ -26,6 +26,7 @@ public class JTEGameData {
         cities.add(new ArrayList<>());
         cities.add(new ArrayList<>());
         
+        /* Loads cities into an ArrayList */
         try{
             File csvFile = new File(CityPath);
             if(csvFile.exists()) {

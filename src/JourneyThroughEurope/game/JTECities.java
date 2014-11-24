@@ -4,12 +4,10 @@
  * and open the template in the editor.
  */
 package JourneyThroughEurope.game;
-
 /**
  *
  * @author Maggie
  */
-
 public class JTECities {
     private String name;
     private String color;
@@ -69,6 +67,5 @@ public class JTECities {
 
     public void setY(int y) {
         this.y = y;
-    }
-    
+    }   
 }

@@ -12,7 +12,7 @@
         <property name="SPLASH_SCREEN_IMAGE_NAME"   value="JTESplashScreen.png"></property>
         <property name="DATA_PATH"                  value="./data/"></property>
         <property name="IMG_PATH"                   value="./img/"></property>
-		<property name="CITIES_PATH"				value="./data/cities.csv"></property>
+		<property name="CITIES_PATH"				value="./data/cities2.csv"></property>
 		<property name="FXML_PATH"					value="./src/JourneyThroughEurope/ui/GameScreenUI.fxml"></property>
 
 		<property name="EXIT_REQUEST_TEXT"      	value="Are you sure you wish to quit?"></property>
