@@ -32,7 +32,9 @@
 		<property name="PLAYER6_IMG_NAME"			value="flag_white.png"></property>
 		<property name="BACK_PATTERN_NAME"			value="pattern.jpg"></property>
 		<property name="MAP1_IMAGE_NAME"			value="map1.jpg"></property>
-		<property name="MAP2_IMAGE_NAME"			value="map2.png"></property>
+		<property name="MAP2_IMAGE_NAME"			value="map2.jpg"></property>
+        <property name="MAP3_IMAGE_NAME"            value="map3.jpg"></property>
+        <property name="MAP4_IMAGE_NAME"            value="map4.jpg"></property>
 		<property name="ABOUT_NAME"					value="About.png"></property>
 		<property name="BACK_NAME"					value="Back.png"></property>
 		<property name="FLIGHT_PLAN"				value="FlightPlan.png"></property>
