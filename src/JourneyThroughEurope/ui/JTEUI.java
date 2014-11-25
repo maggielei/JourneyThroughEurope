@@ -36,6 +36,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import javafx.scene.layout.HBox;
 import java.util.Arrays;
+
 public class JTEUI extends Pane {
 
     private BorderPane getGamePanel() {
@@ -63,10 +64,13 @@ public class JTEUI extends Pane {
     private Button newGameButton;
     private BorderPane gamePanel = new BorderPane();
     static int quad = 0;
+    static ArrayList<City> allCities = new ArrayList();
+    
     // Player Select Pane
     private BorderPane playerSelectPane = new BorderPane();
     private BorderPane playerPanel = new BorderPane();
     private GridPane playerGrid = new GridPane();
+    
     //HelpPane
     private BorderPane helpPanel;
     private BorderPane helpPane;
@@ -435,18 +439,22 @@ public class JTEUI extends Pane {
         saveButton.setGraphic(saveImageView);
         historyButton.setGraphic(historyImageView);
         aboutButton.setGraphic(aboutImageView);
-        
+
         flightButton.setStyle("-fx-background-color: transparent;");
         saveButton.setStyle("-fx-background-color: transparent;");
         historyButton.setStyle("-fx-background-color: transparent;");
         aboutButton.setStyle("-fx-background-color: transparent;");
 
+        String CityPath = props.getProperty(JTEPropertyType.CITIES_PATH);
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(new File("data/cities.xml"));
             Node root = doc.getElementsByTagName("routes").item(0);
             NodeList cardlist = root.getChildNodes();
+            String name = "";
+            ArrayList<String> sea = new ArrayList();
+            ArrayList<String> land = new ArrayList();
             for (int i = 0; i < cardlist.getLength(); i++) {
                 Node cardNode = cardlist.item(i);
                 if (cardNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -457,16 +465,18 @@ public class JTEUI extends Pane {
                             Node theNode = cardAttrs.item(j);
                             switch (theNode.getNodeName()) {
                                 case "name":
-                                    System.out.println("City name: "
-                                            + theNode.getTextContent());
+                                    name = theNode.getTextContent();
+//                                    System.out.println("City name: "
+//                                            + theNode.getTextContent());
                                     break;
                                 case "land":
                                     NodeList landList = theNode.getChildNodes();
                                     for (int k = 0; k < landList.getLength(); k++) {
                                         if (landList.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                                            System.out.println("Land neighbour: "
-                                                    + landList.item(k)
-                                                    .getTextContent());
+                                            land.add(landList.item(k).getTextContent());
+//                                            System.out.println("Land neighbour: "
+//                                                    + landList.item(k)
+//                                                    .getTextContent());
                                         }
                                     }
                                     break;
@@ -474,14 +484,31 @@ public class JTEUI extends Pane {
                                     NodeList seaList = theNode.getChildNodes();
                                     for (int k = 0; k < seaList.getLength(); k++) {
                                         if (seaList.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                                            System.out.println("Sea neighbour: "
-                                                    + seaList.item(k)
-                                                    .getTextContent());
+                                            sea.add(seaList.item(k).getTextContent());
+//                                            System.out.println("Sea neighbour: "
+//                                                    + seaList.item(k)
+//                                                    .getTextContent());
                                         }
                                     }
                                     break;
                             }
                         }
+                    }
+                    City newCity = new City(name, land, sea);
+                    allCities.add(newCity);
+                }
+            }
+            BufferedReader cities = new BufferedReader(new FileReader(CityPath));
+            String line = "";
+            String split = ",";
+            String[] csvCity = line.split(split);
+            while ((line = cities.readLine()) != null) {
+                for (City rackCity : allCities) {
+                    if (rackCity.getName().equals(csvCity[0])){
+                        rackCity.setColor(csvCity[1]);
+                        rackCity.setQuad(Integer.parseInt(csvCity[2]));
+                        rackCity.setX(Double.parseDouble(csvCity[3]));
+                        rackCity.setY(Double.parseDouble(csvCity[4]));
                     }
                 }
             }
@@ -489,6 +516,7 @@ public class JTEUI extends Pane {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
+
         HBox gridSelector = new HBox(4);
         Button q1 = new Button("Q1");
         Button q2 = new Button("Q2");
@@ -497,12 +525,11 @@ public class JTEUI extends Pane {
         gridSelector.getChildren().addAll(q1, q2, q3, q4);
 
         Pane mapShits1 = new Pane();
-        String CityPath = props.getProperty(JTEPropertyType.CITIES_PATH);
         int counter1 = 0;
         int counter2 = 0;
         int counter3 = 0;
         int counter4 = 0;
-        
+
         String line = "";
         String split = ",";
 
@@ -516,7 +543,7 @@ public class JTEUI extends Pane {
                 String[] city1 = line.split(split);
                 if (city1[2].equals("1")) {
                     quad1[counter1] = new Button();
-                    quad1[counter1].setOpacity(1);
+                    quad1[counter1].setOpacity(.4);
                     quad1[counter1].setPadding(new Insets(0, 5, 0, 5));
                     quad1[counter1].setLayoutX(Double.parseDouble(city1[3]) / 4.429 - 7);
                     quad1[counter1].setLayoutY(Double.parseDouble(city1[4]) / 4.429 - 7);
@@ -530,7 +557,7 @@ public class JTEUI extends Pane {
                 String[] city2 = line.split(split);
                 if (city1[2].equals("2")) {
                     quad2[counter2] = new Button();
-                    quad2[counter2].setOpacity(1);
+                    quad2[counter2].setOpacity(.4);
                     quad2[counter2].setPadding(new Insets(0, 5, 0, 5));
                     quad2[counter2].setLayoutX(Double.parseDouble(city2[3]) / 4.429 - 7);
                     quad2[counter2].setLayoutY(Double.parseDouble(city2[4]) / 4.429 - 7);
@@ -544,7 +571,7 @@ public class JTEUI extends Pane {
                 String[] city3 = line.split(split);
                 if (city1[2].equals("3")) {
                     quad3[counter3] = new Button();
-                    quad3[counter3].setOpacity(1);
+                    quad3[counter3].setOpacity(.4);
                     quad3[counter3].setPadding(new Insets(0, 5, 0, 5));
                     quad3[counter3].setLayoutX(Double.parseDouble(city3[3]) / 4.429 - 7);
                     quad3[counter3].setLayoutY(Double.parseDouble(city3[4]) / 4.429 - 7);
@@ -558,7 +585,7 @@ public class JTEUI extends Pane {
                 String[] city4 = line.split(split);
                 if (city1[2].equals("4")) {
                     quad4[counter4] = new Button();
-                    quad4[counter4].setOpacity(1);
+                    quad4[counter4].setOpacity(.4);
                     quad4[counter4].setPadding(new Insets(0, 5, 0, 5));
                     quad4[counter4].setLayoutX(Double.parseDouble(city1[3]) / 4.429 - 7);
                     quad4[counter4].setLayoutY(Double.parseDouble(city1[4]) / 4.429 - 7);
@@ -573,7 +600,7 @@ public class JTEUI extends Pane {
         } catch (Exception E) {
             E.printStackTrace();
         }
-                
+
         map1ImageView.setFitHeight(580);
         map1ImageView.setPreserveRatio(true);
         mapShits1.getChildren().add(map1ImageView);
@@ -582,7 +609,7 @@ public class JTEUI extends Pane {
         q1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(quad != 1){
+                if (quad != 1) {
                     mapShits1.getChildren().removeAll(quad2);
                     mapShits1.getChildren().removeAll(quad3);
                     mapShits1.getChildren().removeAll(quad4);
@@ -597,7 +624,7 @@ public class JTEUI extends Pane {
         q2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(quad != 2){
+                if (quad != 2) {
                     mapShits1.getChildren().removeAll(quad1);
                     mapShits1.getChildren().removeAll(quad3);
                     mapShits1.getChildren().removeAll(quad4);
@@ -612,7 +639,7 @@ public class JTEUI extends Pane {
         q3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(quad != 3){
+                if (quad != 3) {
                     mapShits1.getChildren().removeAll(quad1);
                     mapShits1.getChildren().removeAll(quad2);
                     mapShits1.getChildren().removeAll(quad4);
@@ -627,7 +654,7 @@ public class JTEUI extends Pane {
         q4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(quad != 4){
+                if (quad != 4) {
                     mapShits1.getChildren().removeAll(quad1);
                     mapShits1.getChildren().removeAll(quad2);
                     mapShits1.getChildren().removeAll(quad3);
@@ -654,7 +681,9 @@ public class JTEUI extends Pane {
                 eventHandler.respondToHistoryRequest();
             }
         });
-
+        System.out.println(randomCard());
+        System.out.println(randomCard());
+        System.out.println(randomCard());
         gameOptions.getChildren().add(gridSelector);
         gameOptions.getChildren().add(flightButton);
         gameOptions.getChildren().add(historyButton);
@@ -664,7 +693,6 @@ public class JTEUI extends Pane {
         gamePane.setRight(gameOptions);
         gamePane.setPrefSize(820, 600);
         workspace.getChildren().add(gamePane);
-
     }
 
     public String randomCard() {
