@@ -1,5 +1,6 @@
 package JourneyThroughEurope.ui;
 
+import JourneyThroughEurope.game.JTEGame;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JEditorPane;
@@ -14,6 +15,7 @@ import application.Main.JTEPropertyType;
 import properties_manager.PropertiesManager;
 import xml_utilities.InvalidXMLFileFormatException;
 import JourneyThroughEurope.game.JTEGameStateManager;
+import JourneyThroughEurope.game.Player;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
@@ -23,11 +25,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 public class JTEEventHandler {
-
     private JTEUI ui;
     private JTEGameStateManager gsm;
     private int numPlayers;
-
+    private ArrayList<Player> allPlayers = new ArrayList();
     public JTEEventHandler(JTEUI initUI) {
         ui = initUI;
     }
@@ -40,8 +41,8 @@ public class JTEEventHandler {
         ui.changeWorkspace(uiState);
     }
 
-    public void setNumPlayas(int playas) {
-        numPlayers = playas;
+    public void setNumPlayas(int players) {
+        numPlayers = players;
     }
 
     public int getNumPlayas() {
@@ -50,9 +51,23 @@ public class JTEEventHandler {
 
     public void respondToStartRequest() {
         ui.initGameScreen();
-        System.out.println("WE HAVE " + this.numPlayers + " PLAYAS");
     }
-
+    public void respondToStartGameRequest(ArrayList<City> allCities){
+        JTEGame newGame = new JTEGame(this.numPlayers, allCities);
+        //Add all the players to the player list
+        for(int i = 1; i <= this.numPlayers; i++){
+            Player newPlayer = new Player();
+            allPlayers.add(newPlayer);
+            //Each player gets cards
+            System.out.println("Player " + i);
+            newGame.dealCards(newPlayer);
+            System.out.println("");
+            newPlayer.setNumber(i);
+//            ui.addFigures(newPlayer.getRedCard().getQuad(), newPlayer.getRedCard().getX(), 
+//                    newPlayer.getRedCard().getY(), i);
+        }
+        newGame.setAllPlayers(allPlayers);
+    }
     public void respondToAboutRequest() {
         ui.initHelpPane();
     }
@@ -71,18 +86,45 @@ public class JTEEventHandler {
         playerGrid.add(player4, 0, 2);
         playerGrid.add(player5, 1, 2);
         playerGrid.add(player6, 2, 2);
+
+        player1.setVisible(false);
+        player2.setVisible(false);
+        player3.setVisible(false);
+        player4.setVisible(false);
+        player5.setVisible(false);
+        player6.setVisible(false);
         
         if (playas == 1) {
             player1.setVisible(true);
         } else if (playas == 2) {
+            player3.setVisible(false);
+            player4.setVisible(false);
+            player5.setVisible(false);
+            player6.setVisible(false);
             player2.setVisible(true);
         } else if (playas == 3) {
+            player4.setVisible(false);
+            player5.setVisible(false);
+            player6.setVisible(false);
+            player2.setVisible(true);
             player3.setVisible(true);
         } else if (playas == 4) {
+            player5.setVisible(false);
+            player6.setVisible(false);
+            player2.setVisible(true);
+            player3.setVisible(true);
             player4.setVisible(true);
         } else if (playas == 5) {
+            player6.setVisible(false);
+            player2.setVisible(true);
+            player3.setVisible(true);
+            player4.setVisible(true);
             player5.setVisible(true);
         } else if (playas == 6) {
+            player2.setVisible(true);
+            player3.setVisible(true);
+            player4.setVisible(true);
+            player5.setVisible(true);
             player6.setVisible(true);
         }
     }

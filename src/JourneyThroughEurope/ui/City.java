@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package JourneyThroughEurope.ui;
 import java.util.ArrayList;
 /**
@@ -14,6 +9,7 @@ public class City {
     private ArrayList<String> land = new ArrayList();
     private ArrayList<String> sea = new ArrayList();
     private boolean hasInstruction = false;
+    private boolean isChosen = false;
     private String color;
     private int quadrant;
     private double x;
@@ -54,6 +50,12 @@ public class City {
     }
     public boolean getHasInstruction(){
         return hasInstruction;
+    }
+    public void setIsChosen(boolean x){
+        this.isChosen = x;
+    }
+    public boolean getIsChosen(){
+        return isChosen;
     }
     public double getX(){
         return this.x;

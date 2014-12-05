@@ -26,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Random;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -57,7 +56,6 @@ public class JTEUI extends Pane {
     private ImageView splashScreenImageView;
     private Pane splashScreenPane;
     private Label splashScreenImageLabel;
-    private ArrayList<Button> languageButtons;
 
     // GamePane
     private Label HangManLabel;
@@ -65,12 +63,16 @@ public class JTEUI extends Pane {
     private BorderPane gamePanel = new BorderPane();
     static int quad = 0;
     static ArrayList<City> allCities = new ArrayList();
-    
     // Player Select Pane
     private BorderPane playerSelectPane = new BorderPane();
     private BorderPane playerPanel = new BorderPane();
     private GridPane playerGrid = new GridPane();
-    
+    static int choice = 0;
+    static Pane mapContainer = new Pane();
+    static Button[] quad1 = new Button[20];
+    static Button[] quad2 = new Button[35];
+    static Button[] quad3 = new Button[65];
+    static Button[] quad4 = new Button[60];
     //HelpPane
     private BorderPane helpPanel;
     private BorderPane helpPane;
@@ -117,6 +119,10 @@ public class JTEUI extends Pane {
         return gsm;
     }
 
+    public ArrayList<City> getAllCities() {
+        return this.allCities;
+    }
+
     public BorderPane getHelpPane() {
         return helpPane;
     }
@@ -142,9 +148,8 @@ public class JTEUI extends Pane {
         String helpButtonImagePath = props.getProperty(JTEPropertyType.HELP_IMG_NAME);
         String exitButtonImagePath = props.getProperty(JTEPropertyType.EXIT_IMG_NAME);
 
-        props.addProperty(JTEPropertyType.INSETS, "0");
-        String str = props.getProperty(JTEPropertyType.INSETS);
-
+//        props.addProperty(JTEPropertyType.INSETS, "0");
+//        String str = props.getProperty(JTEPropertyType.INSETS);
         splashScreenPane = new Pane();
         Image splashScreenImage = loadImage(splashScreenImagePath);
         splashScreenImageView = new ImageView(splashScreenImage);
@@ -233,7 +238,7 @@ public class JTEUI extends Pane {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         ComboBox playerComboBox = new ComboBox();
 
-        playerComboBox.getItems().addAll("1",
+        playerComboBox.getItems().addAll(
                 "2",
                 "3",
                 "4",
@@ -250,14 +255,16 @@ public class JTEUI extends Pane {
         numPlayers.setFont(Font.font("Georgia", 16));
         numPlayers.setTextFill(Color.WHITE);
         Button startButton = new Button("Start!");
+        startButton.setDisable(true);
         startButton.setFont(Font.font("Georgia", 16));
+        eventHandler.showPanes(1, playerGrid);
         playerComboBox.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int choice = Integer.parseInt(playerComboBox.getValue().toString());
+                choice = Integer.parseInt(playerComboBox.getValue().toString());
                 eventHandler.setNumPlayas(choice);
                 eventHandler.showPanes(choice, playerGrid);
-                System.out.println(choice);
+                startButton.setDisable(false);
             }
         });
         startButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -267,7 +274,6 @@ public class JTEUI extends Pane {
                 eventHandler.respondToStartRequest();
             }
         });
-
         playerGrid.add(numPlayers, 0, 0);
         playerGrid.add(playerComboBox, 1, 0);
         playerGrid.add(startButton, 2, 0);
@@ -294,17 +300,12 @@ public class JTEUI extends Pane {
         rb2.setFont(Font.font("Georgia", 12));
         rb2.setTextFill(Color.WHITE);
         rb2.setToggleGroup(group);
-        Label nameLabel = new Label("Name:");
-        nameLabel.setFont(Font.font("Georgia", 12));
-        nameLabel.setTextFill(Color.WHITE);
 
         TextField nameField = new TextField();
         option.setPadding(new Insets(50));
         option.setPrefSize(240, 240);
-        option.getChildren().add(nameLabel);
-        option.getChildren().add(nameField);
         playerPane.getChildren().add(option);
-        playerPane.setVisible(false);
+        //playerPane.setVisible(false);
         return playerPane;
     }
 
@@ -445,6 +446,12 @@ public class JTEUI extends Pane {
         historyButton.setStyle("-fx-background-color: transparent;");
         aboutButton.setStyle("-fx-background-color: transparent;");
 
+        Label dieLabel = new Label();
+        String diePath = "die_1.jpg";
+        Image dieImage = loadImage(diePath);
+        ImageView dieImageView = new ImageView(dieImage);
+        dieLabel.setGraphic(dieImageView);
+
         String CityPath = props.getProperty(JTEPropertyType.CITIES_PATH);
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -453,9 +460,10 @@ public class JTEUI extends Pane {
             Node root = doc.getElementsByTagName("routes").item(0);
             NodeList cardlist = root.getChildNodes();
             String name = "";
-            ArrayList<String> sea = new ArrayList();
-            ArrayList<String> land = new ArrayList();
             for (int i = 0; i < cardlist.getLength(); i++) {
+                ArrayList<String> sea = new ArrayList();
+                ArrayList<String> land = new ArrayList();
+
                 Node cardNode = cardlist.item(i);
                 if (cardNode.getNodeType() == Node.ELEMENT_NODE) {
                     NodeList cardAttrs = cardNode.getChildNodes();
@@ -500,11 +508,11 @@ public class JTEUI extends Pane {
             }
             BufferedReader cities = new BufferedReader(new FileReader(CityPath));
             String line = "";
-            String split = ",";
-            String[] csvCity = line.split(split);
             while ((line = cities.readLine()) != null) {
+                String[] csvCity = line.split(",");
                 for (City rackCity : allCities) {
-                    if (rackCity.getName().equals(csvCity[0])){
+                    if (rackCity.getName().equalsIgnoreCase(csvCity[0])) {
+                        // working
                         rackCity.setColor(csvCity[1]);
                         rackCity.setQuad(Integer.parseInt(csvCity[2]));
                         rackCity.setX(Double.parseDouble(csvCity[3]));
@@ -512,7 +520,6 @@ public class JTEUI extends Pane {
                     }
                 }
             }
-            
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
@@ -524,99 +531,89 @@ public class JTEUI extends Pane {
         Button q4 = new Button("Q4");
         gridSelector.getChildren().addAll(q1, q2, q3, q4);
 
-        Pane mapShits1 = new Pane();
         int counter1 = 0;
         int counter2 = 0;
         int counter3 = 0;
         int counter4 = 0;
 
-        String line = "";
-        String split = ",";
-
-        Button[] quad1 = new Button[20];
-        Button[] quad2 = new Button[35];
-        Button[] quad3 = new Button[65];
-        Button[] quad4 = new Button[59];
-        try {
-            BufferedReader cities = new BufferedReader(new FileReader(CityPath));
-            while ((line = cities.readLine()) != null) {
-                String[] city1 = line.split(split);
-                if (city1[2].equals("1")) {
-                    quad1[counter1] = new Button();
-                    quad1[counter1].setOpacity(.4);
-                    quad1[counter1].setPadding(new Insets(0, 5, 0, 5));
-                    quad1[counter1].setLayoutX(Double.parseDouble(city1[3]) / 4.429 - 7);
-                    quad1[counter1].setLayoutY(Double.parseDouble(city1[4]) / 4.429 - 7);
-                    quad1[counter1].setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event) {
-                            System.out.println(city1[0]);
-                        }
-                    });
-                    counter1++;
-                }
-                String[] city2 = line.split(split);
-                if (city1[2].equals("2")) {
-                    quad2[counter2] = new Button();
-                    quad2[counter2].setOpacity(.4);
-                    quad2[counter2].setPadding(new Insets(0, 5, 0, 5));
-                    quad2[counter2].setLayoutX(Double.parseDouble(city2[3]) / 4.429 - 7);
-                    quad2[counter2].setLayoutY(Double.parseDouble(city2[4]) / 4.429 - 7);
-                    quad2[counter2].setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event) {
-                            System.out.println(city2[0]);
-                        }
-                    });
-                    counter2++;
-                }
-                String[] city3 = line.split(split);
-                if (city1[2].equals("3")) {
-                    quad3[counter3] = new Button();
-                    quad3[counter3].setOpacity(.4);
-                    quad3[counter3].setPadding(new Insets(0, 5, 0, 5));
-                    quad3[counter3].setLayoutX(Double.parseDouble(city3[3]) / 4.429 - 7);
-                    quad3[counter3].setLayoutY(Double.parseDouble(city3[4]) / 4.429 - 7);
-                    quad3[counter3].setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event) {
-                            System.out.println(city3[0]);
-                        }
-                    });
-                    counter3++;
-                }
-                String[] city4 = line.split(split);
-                if (city1[2].equals("4")) {
-                    quad4[counter4] = new Button();
-                    quad4[counter4].setOpacity(.4);
-                    quad4[counter4].setPadding(new Insets(0, 5, 0, 5));
-                    quad4[counter4].setLayoutX(Double.parseDouble(city1[3]) / 4.429 - 7);
-                    quad4[counter4].setLayoutY(Double.parseDouble(city1[4]) / 4.429 - 7);
-                    quad4[counter4].setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event) {
-                            System.out.println(city4[0]);
-                        }
-                    });
-                    counter4++;
-                }
+        // Creates city buttons for each quadrant
+        for (City rackCity : allCities) {
+            if (rackCity.getQuad() == 1) {
+                quad1[counter1] = new Button();
+                quad1[counter1].setStyle("-fx-color: black;-fx-background-radius: 50 50 50 50;");
+                quad1[counter1].setOpacity(1);
+                quad1[counter1].setPadding(new Insets(0, 5, 0, 5));
+                quad1[counter1].setLayoutX(rackCity.getX() / 4.429 - 7);
+                quad1[counter1].setLayoutY(rackCity.getY() / 4.429 - 7);
+                quad1[counter1].setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        System.out.println(rackCity.getName());
+                    }
+                });
+                counter1++;
             }
-        } catch (Exception E) {
-            E.printStackTrace();
+            if (rackCity.getQuad() == 2) {
+                quad2[counter2] = new Button();
+                quad2[counter2].setStyle("-fx-color: black;-fx-background-radius: 50 50 50 50;");
+                quad2[counter2].setOpacity(1);
+                quad2[counter2].setPadding(new Insets(0, 5, 0, 5));
+                quad2[counter2].setLayoutX(rackCity.getX() / 4.429 - 7);
+                quad2[counter2].setLayoutY(rackCity.getY() / 4.429 - 7);
+                quad2[counter2].setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        System.out.println(rackCity.getName());
+                    }
+                });
+                counter2++;
+            }
+            if (rackCity.getQuad() == 3) {
+                quad3[counter3] = new Button();
+                quad3[counter3].setStyle("-fx-color: black;-fx-background-radius: 50 50 50 50;");
+                quad3[counter3].setOpacity(1);
+                quad3[counter3].setPadding(new Insets(0, 5, 0, 5));
+                quad3[counter3].setLayoutX(rackCity.getX() / 4.429 - 7);
+                quad3[counter3].setLayoutY(rackCity.getY() / 4.429 - 7);
+                quad3[counter3].setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+
+                        System.out.println(rackCity.getName());
+                    }
+                });
+                counter3++;
+            }
+            if (rackCity.getQuad() == 4) {
+                quad4[counter4] = new Button();
+                quad4[counter4].setStyle("-fx-color: black;-fx-background-radius: 50 50 50 50;");
+                quad4[counter4].setOpacity(1);
+                quad4[counter4].setPadding(new Insets(0, 5, 0, 5));
+                quad4[counter4].setLayoutX(rackCity.getX() / 4.429 - 7);
+                quad4[counter4].setLayoutY(rackCity.getY() / 4.429 - 7);
+                quad4[counter4].setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        System.out.println(rackCity.getName());
+                    }
+                });
+                counter4++;
+            }
         }
 
         map1ImageView.setFitHeight(580);
         map1ImageView.setPreserveRatio(true);
-        mapShits1.getChildren().add(map1ImageView);
-        mapShits1.getChildren().addAll(Arrays.asList(quad1));
+        mapContainer.getChildren().add(map1ImageView);
+        mapContainer.getChildren().addAll(Arrays.asList(quad1));
 
+        // Add die imageview
         q1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (quad != 1) {
-                    mapShits1.getChildren().removeAll(quad2);
-                    mapShits1.getChildren().removeAll(quad3);
-                    mapShits1.getChildren().removeAll(quad4);
+                    mapContainer.getChildren().removeAll(quad2);
+                    mapContainer.getChildren().removeAll(quad3);
+                    mapContainer.getChildren().removeAll(quad4);
                     map1ImageView.setImage(map1Image);
                     map1ImageView.setFitHeight(580);
                     map1ImageView.setPreserveRatio(true);
-                    mapShits1.getChildren().addAll(Arrays.asList(quad1));
+                    mapContainer.getChildren().addAll(Arrays.asList(quad1));
                     quad = 1;
                 }
             }
@@ -625,13 +622,13 @@ public class JTEUI extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 if (quad != 2) {
-                    mapShits1.getChildren().removeAll(quad1);
-                    mapShits1.getChildren().removeAll(quad3);
-                    mapShits1.getChildren().removeAll(quad4);
+                    mapContainer.getChildren().removeAll(quad1);
+                    mapContainer.getChildren().removeAll(quad3);
+                    mapContainer.getChildren().removeAll(quad4);
                     map1ImageView.setImage(map2Image);
                     map1ImageView.setFitHeight(580);
                     map1ImageView.setPreserveRatio(true);
-                    mapShits1.getChildren().addAll(Arrays.asList(quad2));
+                    mapContainer.getChildren().addAll(Arrays.asList(quad2));
                     quad = 2;
                 }
             }
@@ -640,13 +637,13 @@ public class JTEUI extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 if (quad != 3) {
-                    mapShits1.getChildren().removeAll(quad1);
-                    mapShits1.getChildren().removeAll(quad2);
-                    mapShits1.getChildren().removeAll(quad4);
+                    mapContainer.getChildren().removeAll(quad1);
+                    mapContainer.getChildren().removeAll(quad2);
+                    mapContainer.getChildren().removeAll(quad4);
                     map1ImageView.setImage(map3Image);
                     map1ImageView.setFitHeight(580);
                     map1ImageView.setPreserveRatio(true);
-                    mapShits1.getChildren().addAll(Arrays.asList(quad3));
+                    mapContainer.getChildren().addAll(Arrays.asList(quad3));
                     quad = 3;
                 }
             }
@@ -655,17 +652,18 @@ public class JTEUI extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 if (quad != 4) {
-                    mapShits1.getChildren().removeAll(quad1);
-                    mapShits1.getChildren().removeAll(quad2);
-                    mapShits1.getChildren().removeAll(quad3);
+                    mapContainer.getChildren().removeAll(quad1);
+                    mapContainer.getChildren().removeAll(quad2);
+                    mapContainer.getChildren().removeAll(quad3);
                     map1ImageView.setImage(map4Image);
                     map1ImageView.setFitHeight(580);
                     map1ImageView.setPreserveRatio(true);
-                    mapShits1.getChildren().addAll(Arrays.asList(quad4));
+                    mapContainer.getChildren().addAll(Arrays.asList(quad4));
                     quad = 4;
                 }
             }
         });
+
         aboutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -681,44 +679,33 @@ public class JTEUI extends Pane {
                 eventHandler.respondToHistoryRequest();
             }
         });
-        System.out.println(randomCard());
-        System.out.println(randomCard());
-        System.out.println(randomCard());
-        gameOptions.getChildren().add(gridSelector);
-        gameOptions.getChildren().add(flightButton);
-        gameOptions.getChildren().add(historyButton);
-        gameOptions.getChildren().add(aboutButton);
-        gameOptions.getChildren().add(saveButton);
-        gamePane.getChildren().add(mapShits1);
-        gamePane.setRight(gameOptions);
+        VBox leftSide = new VBox();
+        Button hello = new Button("Start!");
+        leftSide.getChildren().add(hello);
+        hello.setFont(Font.font("Georgia", 16));
+        hello.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                eventHandler.respondToStartGameRequest(allCities);
+            }
+        });
+        HBox gameContainer = new HBox();
+        gameOptions.getChildren().addAll(dieLabel,
+                gridSelector,
+                flightButton,
+                historyButton,
+                aboutButton,
+                saveButton);
+        gameOptions.setStyle("-fx-alignment: center;");
+        gameContainer.getChildren().addAll(leftSide,
+                mapContainer,
+                gameOptions);
+        //gamePane.getChildren().add(mapContainer);
+        //gamePane.setRight(gameOptions);
+        gamePane.setCenter(gameContainer);
         gamePane.setPrefSize(820, 600);
         workspace.getChildren().add(gamePane);
-    }
-
-    public String randomCard() {
-        Random rand = new Random();
-        int randomCard = rand.nextInt((179 - 1) + 1) + 1;
-        int count = 0;
-        String name = "";
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String CityPath = props.getProperty(JTEPropertyType.CITIES_PATH);
-        String line = "";
-        String split = ",";
-        try {
-            BufferedReader cityFile = new BufferedReader(new FileReader(CityPath));
-            while ((line = cityFile.readLine()) != null) {
-                String[] city = line.split(split);
-                if (count == randomCard) {
-                    name = city[0];
-                    break;
-                } else {
-                    count++;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return name;
     }
 
     public void changeWorkspace(JTEUIState uiScreen) {
@@ -730,5 +717,73 @@ public class JTEUI extends Pane {
             mainPane.setCenter(splashScreenPane);
             mainPane.setBottom(startBar);
         }
+    }
+
+    public void addFigures(int figureQuad, double x, double y, int i) {
+//        PropertiesManager props = PropertiesManager.getPropertiesManager();
+//        String map1ImagePath = props.getProperty(JTEPropertyType.MAP1_IMAGE_NAME);
+//        String map2ImagePath = props.getProperty(JTEPropertyType.MAP2_IMAGE_NAME);
+//        String map3ImagePath = props.getProperty(JTEPropertyType.MAP3_IMAGE_NAME);
+//        String map4ImagePath = props.getProperty(JTEPropertyType.MAP4_IMAGE_NAME);
+//        Image map1Image = loadImage(map1ImagePath);
+//        Image map2Image = loadImage(map2ImagePath);
+//        Image map3Image = loadImage(map3ImagePath);
+//        Image map4Image = loadImage(map4ImagePath);
+//
+//        ImageView map1ImageView = new ImageView(map1Image);
+//        if (figureQuad == 1) {
+//            if (quad != 1) {
+//                mapContainer.getChildren().removeAll(quad2);
+//                mapContainer.getChildren().removeAll(quad3);
+//                mapContainer.getChildren().removeAll(quad4);
+//                map1ImageView.setImage(map1Image);
+//                map1ImageView.setFitHeight(580);
+//                map1ImageView.setPreserveRatio(true);
+//                mapContainer.getChildren().addAll(Arrays.asList(quad1));
+//                quad = 1;
+//            }
+//        } else if (figureQuad == 2) {
+//            if (quad != 2) {
+//                mapContainer.getChildren().removeAll(quad1);
+//                mapContainer.getChildren().removeAll(quad3);
+//                mapContainer.getChildren().removeAll(quad4);
+//                map1ImageView.setImage(map2Image);
+//                map1ImageView.setFitHeight(580);
+//                map1ImageView.setPreserveRatio(true);
+//                mapContainer.getChildren().addAll(Arrays.asList(quad2));
+//                quad = 2;
+//            }
+//        } else if (figureQuad == 3) {
+//            if (quad != 3) {
+//                mapContainer.getChildren().removeAll(quad1);
+//                mapContainer.getChildren().removeAll(quad2);
+//                mapContainer.getChildren().removeAll(quad4);
+//                map1ImageView.setImage(map3Image);
+//                map1ImageView.setFitHeight(580);
+//                map1ImageView.setPreserveRatio(true);
+//                mapContainer.getChildren().addAll(Arrays.asList(quad3));
+//                quad = 3;
+//            }
+//
+//        } else if (figureQuad == 4) {
+//            if (quad != 4) {
+//                mapContainer.getChildren().removeAll(quad1);
+//                mapContainer.getChildren().removeAll(quad2);
+//                mapContainer.getChildren().removeAll(quad3);
+//                map1ImageView.setImage(map4Image);
+//                map1ImageView.setFitHeight(580);
+//                map1ImageView.setPreserveRatio(true);
+//                mapContainer.getChildren().addAll(Arrays.asList(quad4));
+//                quad = 4;
+//            }
+//        }
+//        Label playerFigure = new Label();
+//        Image playerImage = loadImage(i + ".png");
+//        ImageView playerImageView = new ImageView(playerImage);
+//        playerFigure.setGraphic(playerImageView);
+//        playerFigure.setLayoutX(x);
+//        playerFigure.setLayoutY(y);
+//        System.out.println("ADD ME TO THE MAP");
+//        mapContainer.getChildren().add(playerFigure);
     }
 }

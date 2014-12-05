@@ -12,15 +12,10 @@ public class JTEGameStateManager {
     JTEEventHandler handler;
     private JTEGameState currentGameState;
     private JTEUI ui;
-    private JTEGameData gameInProgress;
     private final String NEWLINE_DELIMITER = "\n";
     public JTEGameStateManager(JTEUI initUI) {
         ui = initUI;
         currentGameState = JTEGameState.GAME_NOT_STARTED;
-        gameInProgress = null;
-    }
-    public JTEGameData getGameInProgress() {
-        return gameInProgress;
     }
     public boolean isGameNotStarted() {
         return currentGameState == JTEGameState.GAME_NOT_STARTED;

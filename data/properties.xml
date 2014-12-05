@@ -41,13 +41,5 @@
 		<property name="GAME_HISTORY"				value="GameHistory.png"></property>
 		<property name="SAVE_NAME"					value="Save.png"></property>
 		
-		 <!-- TOOLTIPS -->
-        <property name="GAME_TOOLTIP"          		value="Go to Game Screen"></property>
-        <property name="LOAD_TOOLTIP"           	value="Go to Stats Summary Screen"></property>
-        <property name="HELP_TOOLTIP"           	value="Go to Help Screen"></property>
-        <property name="EXIT_TOOLTIP"           	value="Exit the Game Application"></property>
-        <property name="NEW_GAME_TOOLTIP"       	value="Start a New Game"></property>
-        <property name="HOME_TOOLTIP"           	value="Go Home to Hangman Help Page"></property>
-		
     </property_list>
 </properties>

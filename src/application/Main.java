@@ -1,7 +1,5 @@
 package application;
 
-import JourneyThroughEurope.game.JTECities;
-import JourneyThroughEurope.game.JTEGameData;
 import properties_manager.PropertiesManager;
 import JourneyThroughEurope.ui.JTEUI;
 import java.util.List;
@@ -41,7 +39,6 @@ public class Main extends Application {
 //                    System.out.println(quarter.get(i).toString());
 //                }
 //            }
-
             // GET THE LOADED TITLE AND SET IT IN THE FRAME
             String title = props.getProperty(JTEPropertyType.SPLASH_SCREEN_TITLE_TEXT);
             primaryStage.setTitle(title);
@@ -82,17 +79,6 @@ public class Main extends Application {
         WINDOW_ICON, SPLASH_SCREEN_IMAGE_NAME, GAME_IMG_NAME, LOAD_IMG_NAME, HELP_IMG_NAME, EXIT_IMG_NAME, BACK_PATTERN_NAME, MAP1_IMAGE_NAME, MAP2_IMAGE_NAME, MAP3_IMAGE_NAME, MAP4_IMAGE_NAME,
         /* PLAYER FILE NAMES */
         PLAYER1_IMG_NAME, PLAYER2_IMG_NAME, PLAYER3_IMG_NAME, PLAYER4_IMG_NAME, PLAYER5_IMG_NAME, PLAYER6_IMG_NAME,
-        /* DATA FILE STUFF */
-        GAME_FILE_NAME, STATS_FILE_NAME, HELP_FILE_NAME, WORD_LIST_FILE_NAME,
-        /* TOOLTIPS */
-        GAME_TOOLTIP, STATS_TOOLTIP, HELP_TOOLTIP, EXIT_TOOLTIP, NEW_GAME_TOOLTIP, HOME_TOOLTIP,
-        /* FONT DATA */
-        LETTERS_FONT_FAMILY, LETTERS_FONT_SIZE, GUESSES_FONT_FAMILY, GUESSES_FONT_SIZE,
-        /*
-         * THESE ARE FOR LANGUAGE-DEPENDENT ERROR HANDLING, LIKE FOR TEXT PUT
-         * INTO DIALOG BOXES TO NOTIFY THE USER WHEN AN ERROR HAS OCCURED
-         */
-        ERROR_DIALOG_TITLE_TEXT, DUPLICATE_WORD_ERROR_TEXT, IMAGE_LOADING_ERROR_TEXT, INVALID_URL_ERROR_TEXT, INVALID_DOC_ERROR_TEXT, INVALID_XML_FILE_ERROR_TEXT, INVALID_GUESS_LENGTH_ERROR_TEXT, WORD_NOT_IN_DICTIONARY_ERROR_TEXT, INVALID_DICTIONARY_ERROR_TEXT,
-        INSETS
+
     }
 }
