@@ -254,7 +254,7 @@ public class JTEUI extends Pane {
         Label numPlayers = new Label("Number of Players:");
         numPlayers.setFont(Font.font("Georgia", 16));
         numPlayers.setTextFill(Color.WHITE);
-        Button startButton = new Button("Start!");
+        Button startButton = new Button("Deal Cards!");
         startButton.setDisable(true);
         startButton.setFont(Font.font("Georgia", 16));
         eventHandler.showPanes(1, playerGrid);
@@ -720,70 +720,69 @@ public class JTEUI extends Pane {
     }
 
     public void addFigures(int figureQuad, double x, double y, int i) {
-//        PropertiesManager props = PropertiesManager.getPropertiesManager();
-//        String map1ImagePath = props.getProperty(JTEPropertyType.MAP1_IMAGE_NAME);
-//        String map2ImagePath = props.getProperty(JTEPropertyType.MAP2_IMAGE_NAME);
-//        String map3ImagePath = props.getProperty(JTEPropertyType.MAP3_IMAGE_NAME);
-//        String map4ImagePath = props.getProperty(JTEPropertyType.MAP4_IMAGE_NAME);
-//        Image map1Image = loadImage(map1ImagePath);
-//        Image map2Image = loadImage(map2ImagePath);
-//        Image map3Image = loadImage(map3ImagePath);
-//        Image map4Image = loadImage(map4ImagePath);
-//
-//        ImageView map1ImageView = new ImageView(map1Image);
-//        if (figureQuad == 1) {
-//            if (quad != 1) {
-//                mapContainer.getChildren().removeAll(quad2);
-//                mapContainer.getChildren().removeAll(quad3);
-//                mapContainer.getChildren().removeAll(quad4);
-//                map1ImageView.setImage(map1Image);
-//                map1ImageView.setFitHeight(580);
-//                map1ImageView.setPreserveRatio(true);
-//                mapContainer.getChildren().addAll(Arrays.asList(quad1));
-//                quad = 1;
-//            }
-//        } else if (figureQuad == 2) {
-//            if (quad != 2) {
-//                mapContainer.getChildren().removeAll(quad1);
-//                mapContainer.getChildren().removeAll(quad3);
-//                mapContainer.getChildren().removeAll(quad4);
-//                map1ImageView.setImage(map2Image);
-//                map1ImageView.setFitHeight(580);
-//                map1ImageView.setPreserveRatio(true);
-//                mapContainer.getChildren().addAll(Arrays.asList(quad2));
-//                quad = 2;
-//            }
-//        } else if (figureQuad == 3) {
-//            if (quad != 3) {
-//                mapContainer.getChildren().removeAll(quad1);
-//                mapContainer.getChildren().removeAll(quad2);
-//                mapContainer.getChildren().removeAll(quad4);
-//                map1ImageView.setImage(map3Image);
-//                map1ImageView.setFitHeight(580);
-//                map1ImageView.setPreserveRatio(true);
-//                mapContainer.getChildren().addAll(Arrays.asList(quad3));
-//                quad = 3;
-//            }
-//
-//        } else if (figureQuad == 4) {
-//            if (quad != 4) {
-//                mapContainer.getChildren().removeAll(quad1);
-//                mapContainer.getChildren().removeAll(quad2);
-//                mapContainer.getChildren().removeAll(quad3);
-//                map1ImageView.setImage(map4Image);
-//                map1ImageView.setFitHeight(580);
-//                map1ImageView.setPreserveRatio(true);
-//                mapContainer.getChildren().addAll(Arrays.asList(quad4));
-//                quad = 4;
-//            }
-//        }
-//        Label playerFigure = new Label();
-//        Image playerImage = loadImage(i + ".png");
-//        ImageView playerImageView = new ImageView(playerImage);
-//        playerFigure.setGraphic(playerImageView);
-//        playerFigure.setLayoutX(x);
-//        playerFigure.setLayoutY(y);
-//        System.out.println("ADD ME TO THE MAP");
-//        mapContainer.getChildren().add(playerFigure);
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String map1ImagePath = props.getProperty(JTEPropertyType.MAP1_IMAGE_NAME);
+        String map2ImagePath = props.getProperty(JTEPropertyType.MAP2_IMAGE_NAME);
+        String map3ImagePath = props.getProperty(JTEPropertyType.MAP3_IMAGE_NAME);
+        String map4ImagePath = props.getProperty(JTEPropertyType.MAP4_IMAGE_NAME);
+        Image map1Image = loadImage(map1ImagePath);
+        Image map2Image = loadImage(map2ImagePath);
+        Image map3Image = loadImage(map3ImagePath);
+        Image map4Image = loadImage(map4ImagePath);
+
+        ImageView map1ImageView = new ImageView(map1Image);
+        if (figureQuad == 1) {
+            if (quad != 1) {
+                mapContainer.getChildren().removeAll(quad2);
+                mapContainer.getChildren().removeAll(quad3);
+                mapContainer.getChildren().removeAll(quad4);
+                map1ImageView.setImage(map1Image);
+                map1ImageView.setFitHeight(580);
+                map1ImageView.setPreserveRatio(true);
+                mapContainer.getChildren().addAll(Arrays.asList(quad1));
+                quad = 1;
+            }
+        } else if (figureQuad == 2) {
+            if (quad != 2) {
+                mapContainer.getChildren().removeAll(quad1);
+                mapContainer.getChildren().removeAll(quad3);
+                mapContainer.getChildren().removeAll(quad4);
+                map1ImageView.setImage(map2Image);
+                map1ImageView.setFitHeight(580);
+                map1ImageView.setPreserveRatio(true);
+                mapContainer.getChildren().addAll(Arrays.asList(quad2));
+                quad = 2;
+            }
+        } else if (figureQuad == 3) {
+            if (quad != 3) {
+                mapContainer.getChildren().removeAll(quad1);
+                mapContainer.getChildren().removeAll(quad2);
+                mapContainer.getChildren().removeAll(quad4);
+                map1ImageView.setImage(map3Image);
+                map1ImageView.setFitHeight(580);
+                map1ImageView.setPreserveRatio(true);
+                mapContainer.getChildren().addAll(Arrays.asList(quad3));
+                quad = 3;
+            }
+
+        } else if (figureQuad == 4) {
+            if (quad != 4) {
+                mapContainer.getChildren().removeAll(quad1);
+                mapContainer.getChildren().removeAll(quad2);
+                mapContainer.getChildren().removeAll(quad3);
+                map1ImageView.setImage(map4Image);
+                map1ImageView.setFitHeight(580);
+                map1ImageView.setPreserveRatio(true);
+                mapContainer.getChildren().addAll(Arrays.asList(quad4));
+                quad = 4;
+            }
+        }
+        Label playerFigure = new Label();
+        Image playerImage = loadImage(i + ".png");
+        ImageView playerImageView = new ImageView(playerImage);
+        playerFigure.setGraphic(playerImageView);
+        playerFigure.setLayoutX(x);
+        playerFigure.setLayoutY(y);
+        mapContainer.getChildren().add(playerFigure);
     }
 }

@@ -63,8 +63,8 @@ public class JTEEventHandler {
             newGame.dealCards(newPlayer);
             System.out.println("");
             newPlayer.setNumber(i);
-//            ui.addFigures(newPlayer.getRedCard().getQuad(), newPlayer.getRedCard().getX(), 
-//                    newPlayer.getRedCard().getY(), i);
+            ui.addFigures(newPlayer.getRedCard().getQuad(), newPlayer.getRedCard().getX(), 
+                    newPlayer.getRedCard().getY(), i);
         }
         newGame.setAllPlayers(allPlayers);
     }

@@ -9,7 +9,7 @@ import java.util.Collections;
  *
  * @author Maggie
  */
-public class Player {
+public class Player{
     private ArrayList<City> allCities;
     private City redCard;
     private City greenCard;
@@ -37,13 +37,13 @@ public class Player {
     public City getYellowCard(){
         return this.yellowCard;
     }
-//    public void initPosition(int i){
-//        this.number = i;
-//        int quad = this.redCard.getQuad();
-//        double x = this.redCard.getX() / 4.429 - 7;
-//        double y = this.redCard.getY() / 4.429 - 7;
-//        ui.addFigures(quad, x, y, i);
-//    }
+    public void initPosition(int i){
+        this.number = i;
+        int quad = this.redCard.getQuad();
+        double x = this.redCard.getX() / 4.429 - 7;
+        double y = this.redCard.getY() / 4.429 - 7;
+        ui.addFigures(quad, x, y, i);
+    }
     public void setNumber(int i){
         this.number = i;
     }
